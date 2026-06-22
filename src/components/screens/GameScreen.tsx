@@ -39,7 +39,7 @@ export default function GameScreen({
       {/* Logo + Banner */}
       <div
         className="flex-shrink-0 flex flex-col items-center gap-1"
-        style={{ paddingTop: 'clamp(8px, 1.5vh, 12px)' }}
+        style={{ paddingTop: 'clamp(6px, 1svh, 12px)' }}
       >
         {config.logoUrl && (
           <img
@@ -47,7 +47,7 @@ export default function GameScreen({
             alt="Logo"
             className="object-contain"
             style={{
-              height: 'clamp(40px, 8vh, 64px)',
+              height: 'clamp(36px, 7svh, 64px)',
               mixBlendMode: 'multiply',
               filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.2))',
             }}
@@ -58,7 +58,7 @@ export default function GameScreen({
           alt="Spin the Takin"
           className="object-contain w-full"
           style={{
-            maxHeight: 'clamp(72px, 16vh, 300px)',
+            maxHeight: 'clamp(56px, 11svh, 300px)',
             maxWidth: 380,
             filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.3))',
           }}
