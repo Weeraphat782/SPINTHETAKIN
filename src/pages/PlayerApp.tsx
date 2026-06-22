@@ -10,6 +10,7 @@ import GameScreen from '../components/screens/GameScreen'
 import WinnerScreen from '../components/screens/WinnerScreen'
 import AlreadyPlayedScreen from '../components/screens/AlreadyPlayedScreen'
 import MuteButton from '../components/ui/MuteButton'
+import ViewportScale from '../components/ViewportScale'
 
 export default function PlayerApp() {
   const [config, setConfig] = useState<GameConfig | null>(null)
@@ -45,10 +46,11 @@ export default function PlayerApp() {
   }
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
-      <MuteButton muted={muted} onToggle={toggleMute} />
+    <ViewportScale>
+      <div className="relative w-full h-full overflow-hidden">
+        <MuteButton muted={muted} onToggle={toggleMute} />
 
-      <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait">
         {state.screen === 'landing' && (
           <div key="landing" className="absolute inset-0">
             <LandingScreen
@@ -85,7 +87,8 @@ export default function PlayerApp() {
             <AlreadyPlayedScreen />
           </div>
         )}
-      </AnimatePresence>
-    </div>
+        </AnimatePresence>
+      </div>
+    </ViewportScale>
   )
 }

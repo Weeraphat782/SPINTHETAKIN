@@ -64,7 +64,7 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
       {/* Main content */}
       <motion.div
         className="relative w-full max-w-sm mx-auto px-5 flex flex-col items-center"
-        style={{ paddingTop: 10, zIndex: 1 }}
+        style={{ paddingTop: 0, zIndex: 1 }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}

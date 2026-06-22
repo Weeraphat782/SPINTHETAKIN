@@ -7,7 +7,7 @@ export default function MuteButton({ muted, onToggle }: Props) {
   return (
     <button
       onClick={onToggle}
-      className="fixed top-4 right-4 z-50 w-10 h-10 rounded-full flex items-center justify-center text-xl"
+      className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full flex items-center justify-center text-xl"
       style={{
         background: 'rgba(255,248,231,0.85)',
         border: '1.5px solid rgba(212,148,10,0.5)',
