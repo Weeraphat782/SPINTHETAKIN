@@ -62,4 +62,5 @@ export type SpinResult = {
   imageUrl: string
   description: string
   isNoPrize: boolean
+  quantityRemaining: number | null
 }

@@ -99,6 +99,20 @@ export default function PrizePopup({ result, onDone }: Props) {
             <p className="text-sm text-center" style={{ color: '#5D3A1A' }}>{result.description}</p>
           )}
 
+          {isWin && result.quantityRemaining !== null && (
+            <div
+              className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold"
+              style={{
+                background: 'rgba(212,148,10,0.12)',
+                border: '1.5px solid rgba(212,148,10,0.4)',
+                color: '#5D3A1A',
+              }}
+            >
+              <span>📦</span>
+              <span>{result.quantityRemaining} remaining in stock</span>
+            </div>
+          )}
+
           {isWin && (
             <div
               className="w-full rounded-xl p-3 text-center text-sm font-semibold"

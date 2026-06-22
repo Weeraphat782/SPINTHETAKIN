@@ -164,22 +164,22 @@ const WheelMesh = forwardRef<WheelMeshHandle, Props>(({ prizes, spinning }, ref)
     <group ref={spinGroupRef}>
       {/* Flat disc facing the camera — segment 0 at 12 o'clock when rotation.z = 0 */}
       <mesh receiveShadow castShadow>
-        <circleGeometry args={[2.4, 80]} />
+        <circleGeometry args={[2.65, 80]} />
         <meshStandardMaterial map={texture} roughness={0.7} metalness={0.0} side={THREE.DoubleSide} />
       </mesh>
 
       <mesh>
-        <ringGeometry args={[2.31, 2.49, 80]} />
+        <ringGeometry args={[2.55, 2.75, 80]} />
         <meshStandardMaterial color="#D4940A" metalness={0.88} roughness={0.12} side={THREE.DoubleSide} />
       </mesh>
 
       <mesh>
-        <ringGeometry args={[2.29, 2.35, 60]} />
+        <ringGeometry args={[2.52, 2.59, 60]} />
         <meshStandardMaterial color="#F4C430" metalness={0.7} roughness={0.3} side={THREE.DoubleSide} />
       </mesh>
 
       <mesh>
-        <ringGeometry args={[0.165, 0.275, 32]} />
+        <ringGeometry args={[0.18, 0.30, 32]} />
         <meshStandardMaterial color="#D4940A" metalness={0.9} roughness={0.1} side={THREE.DoubleSide} />
       </mesh>
     </group>

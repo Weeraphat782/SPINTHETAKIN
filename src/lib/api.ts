@@ -52,6 +52,7 @@ export async function spin(sessionToken: string): Promise<SpinResult> {
   return {
     ...data,
     isNoPrize: Boolean(data?.isNoPrize),
+    quantityRemaining: data?.quantityRemaining ?? null,
   }
 }
 
