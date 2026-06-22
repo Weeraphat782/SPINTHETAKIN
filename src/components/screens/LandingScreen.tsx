@@ -2,6 +2,16 @@ import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import type { GameConfig } from '../../lib/supabase'
 import { createSession } from '../../lib/api'
+import {
+  landingCanvasStyle,
+  LANDING_LOGO_H,
+  LANDING_BANNER_H,
+  LANDING_TAKIN_H,
+  LANDING_GAP_SM,
+  LANDING_GAP_MD,
+  LANDING_PAD_TOP,
+  LANDING_FORM_H,
+} from '../../lib/playerLayout'
 
 type Props = {
   config: GameConfig
@@ -47,7 +57,7 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
 
   return (
     <div
-      className="relative w-full h-full flex flex-col items-center justify-between overflow-hidden"
+      className="relative w-full h-full overflow-hidden flex justify-center"
       style={{
         backgroundImage: 'url(/assets/Background.png)',
         backgroundSize: 'cover',
@@ -55,32 +65,31 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
         backgroundColor: '#87CEEB',
       }}
     >
-      {/* Slight dark overlay so text stays readable over any background */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.18) 100%)', zIndex: 0 }}
       />
 
-      {/* Main content */}
+      {/* Design canvas — entire block scales to fit any phone, proportions stay identical */}
       <motion.div
-        className="relative w-full max-w-sm mx-auto px-5 flex flex-col items-center"
-        style={{ paddingTop: 8, zIndex: 1 }}
-        initial={{ opacity: 0, y: 30 }}
+        className="relative flex flex-col items-center box-border px-5"
+        style={{ ...landingCanvasStyle(), zIndex: 1, paddingTop: LANDING_PAD_TOP }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Logo */}
         {config.logoUrl ? (
           <img
             src={config.logoUrl}
             alt="Logo"
-            className="mb-3 object-contain drop-shadow-md"
-            style={{ height: 150, mixBlendMode: 'multiply' }}
+            className="object-contain drop-shadow-md shrink-0"
+            style={{ height: LANDING_LOGO_H, width: 'auto', maxWidth: '100%', mixBlendMode: 'multiply' }}
           />
         ) : (
           <div
-            className="flex items-center gap-2 mb-3 px-5 py-2 rounded-full"
+            className="flex items-center gap-2 px-5 py-2 rounded-full shrink-0"
             style={{
+              height: LANDING_LOGO_H,
               background: 'rgba(255,255,255,0.85)',
               border: '1.5px solid rgba(212,148,10,0.6)',
               boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
@@ -92,39 +101,44 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
           </div>
         )}
 
-        {/* Banner */}
+        <div style={{ height: LANDING_GAP_SM }} />
+
         <img
           src="/assets/Banner.png"
           alt="Spin the Takin"
-          className="object-contain w-full mb-3"
-          style={{ maxHeight: 300, maxWidth: 380, filter: 'drop-shadow(0 3px 12px rgba(0,0,0,0.4))' }}
+          className="object-contain w-full shrink-0"
+          style={{ height: LANDING_BANNER_H, maxWidth: 380, filter: 'drop-shadow(0 3px 12px rgba(0,0,0,0.4))' }}
         />
 
-        {/* Takin image */}
+        <div style={{ height: LANDING_GAP_SM }} />
+
         <img
           src="/assets/Takin.png"
           alt="Takin"
           draggable={false}
-          className="mb-4 animate-breathe"
+          className="object-contain shrink-0 animate-breathe"
           style={{
-            height: 220,
-            objectFit: 'contain',
+            height: LANDING_TAKIN_H,
+            width: 'auto',
+            maxWidth: '100%',
             filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.45))',
             userSelect: 'none',
           }}
         />
 
-        {/* Form card */}
+        <div style={{ height: LANDING_GAP_MD }} />
+
         <div
-          className="w-full rounded-2xl px-5 py-5"
+          className="w-full shrink-0 rounded-2xl px-5 py-5 box-border"
           style={{
+            height: LANDING_FORM_H,
             background: 'rgba(255,255,255,0.88)',
             border: '1.5px solid rgba(212,148,10,0.35)',
             boxShadow: '0 8px 32px rgba(44,24,16,0.18)',
             backdropFilter: 'blur(10px)',
           }}
         >
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3 h-full justify-center">
             <div className="flex flex-col gap-1">
               <label className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#5D3A1A' }}>
                 Nickname *
@@ -163,15 +177,13 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
             <button
               type="submit"
               disabled={loading}
-              className="btn-gold mt-1 w-full disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-gold w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Starting…' : 'Start Game'}
             </button>
           </form>
         </div>
       </motion.div>
-
-      <div style={{ height: 24 }} />
     </div>
   )
 }

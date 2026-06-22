@@ -1,47 +1,62 @@
 import type { CSSProperties } from 'react'
 
 /**
- * Desktop-first reference canvas (browser responsive @ 430×844 = scale 1).
- * Tune logo / banner / takin sizes here — mobile scales down proportionally.
+ * Reference proportions (from production screenshot) — NOT a fixed phone size.
+ * The whole block scales uniformly to fit any viewport (100dvh × 100vw).
  */
-export const DESIGN_WIDTH = 430
-export const DESIGN_HEIGHT = 844
+export const LAYOUT_W = 390
 
-/** Hero stack at scale 1 (desktop reference) */
-export const LANDING_HERO_H = 550 // 150 + 300 + 220 + gaps 24
-export const LANDING_FORM_FIXED = 180
-
-export const LANDING_LOGO_H = 160
+export const LANDING_LOGO_H = 150
 export const LANDING_BANNER_H = 300
 export const LANDING_TAKIN_H = 220
+export const LANDING_GAP_SM = 12
+export const LANDING_GAP_MD = 16
+export const LANDING_PAD_TOP = 8
+export const LANDING_PAD_BOTTOM = 24
+export const LANDING_FORM_H = 200
+
+/** Total landing content height at scale 1 */
+export const LANDING_LAYOUT_H =
+  LANDING_PAD_TOP +
+  LANDING_LOGO_H +
+  LANDING_GAP_SM +
+  LANDING_BANNER_H +
+  LANDING_GAP_SM +
+  LANDING_TAKIN_H +
+  LANDING_GAP_MD +
+  LANDING_FORM_H +
+  LANDING_PAD_BOTTOM
 
 export const GAME_LOGO_H = 64
 export const GAME_BANNER_H = 300
+export const GAME_HEADER_GAP = 4
+export const GAME_PAD_TOP = 8
 export const SPIN_TAKIN_W = 188
 
-/**
- * scale = 1 on desktop reference (430×844+).
- * Smaller viewports (phone) shrink width & height together.
- * Extra term prevents hero overflow on very short screens.
- */
-export const PLAYER_SCALE = [
-  'min(',
-  '1,',
-  `100dvh / ${DESIGN_HEIGHT},`,
-  `100vw / ${DESIGN_WIDTH},`,
-  `(100dvh - ${LANDING_FORM_FIXED}px) / ${LANDING_HERO_H}`,
-  ')',
-].join(' ')
+/** Usable viewport height (Safari safe areas) */
+export const VIEWPORT_H =
+  'calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))'
+
+/** One unitless factor — same on every phone, every model */
+export const FIT_SCALE = `min(calc(${VIEWPORT_H} / ${LANDING_LAYOUT_H}), calc(100vw / ${LAYOUT_W}))`
 
 export function playerRootStyle(extra?: CSSProperties): CSSProperties {
-  return { ...extra, '--scale': PLAYER_SCALE } as CSSProperties
+  return { ...extra, '--s': FIT_SCALE } as CSSProperties
 }
 
-/** Multiply a design-pixel value (at desktop scale 1) by --scale */
 export function scaled(designPx: number): string {
-  return `calc(${designPx}px * var(--scale))`
+  return `calc(${designPx}px * var(--s))`
 }
 
-export function designMaxWidth(): string {
-  return `${DESIGN_WIDTH}px`
+/** Landing: fixed design canvas, uniformly scaled to fit the device */
+export function landingCanvasStyle(extra?: CSSProperties): CSSProperties {
+  return {
+    width: LAYOUT_W,
+    height: LANDING_LAYOUT_H,
+    transform: `scale(${FIT_SCALE})`,
+    transformOrigin: 'top center',
+    flexShrink: 0,
+    paddingBottom: LANDING_PAD_BOTTOM,
+    ...extra,
+  } as CSSProperties
 }
