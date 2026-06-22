@@ -16,7 +16,7 @@ type Props = {
   onSpinComplete: (result: SpinResult) => void
   onAlreadyPlayed: () => void
   playSpin: () => void
-  playWin: () => void
+  playWin: (isNoPrize?: boolean) => void
 }
 
 export default function WheelCanvas2D({
@@ -76,7 +76,7 @@ export default function WheelCanvas2D({
           rafRef.current = requestAnimationFrame(animate)
         } else {
           setSpinning(false)
-          playWin()
+          playWin(result.isNoPrize)
           onSpinComplete(result)
         }
       }

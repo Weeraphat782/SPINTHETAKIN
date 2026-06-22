@@ -16,7 +16,7 @@ type Props = {
   onSpinComplete: (result: SpinResult) => void
   onAlreadyPlayed: () => void
   playSpin: () => void
-  playWin: () => void
+  playWin: (isNoPrize?: boolean) => void
 }
 
 function ResponsiveCamera() {
@@ -83,7 +83,7 @@ export default function WheelScene({
         },
         onComplete: () => {
           setSpinning(false)
-          playWin()
+          playWin(result.isNoPrize)
           onSpinComplete(result)
         },
       })

@@ -10,7 +10,7 @@ type Props = {
   onSpinComplete: (result: SpinResult) => void
   onAlreadyPlayed: () => void
   playSpin: () => void
-  playWin: () => void
+  playWin: (isNoPrize?: boolean) => void
 }
 
 export default function GameScreen({

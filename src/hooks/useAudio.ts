@@ -10,6 +10,7 @@ export function useAudio(musicUrl: string | null, defaultOn: boolean) {
   const bgRef = useRef<HTMLAudioElement | null>(null)
   const sfxSpinRef = useRef<Howl | null>(null)
   const sfxWinRef = useRef<Howl | null>(null)
+  const sfxLoseRef = useRef<Howl | null>(null)
 
   function applyMuteState(isMuted: boolean) {
     mutedRef.current = isMuted
@@ -25,6 +26,7 @@ export function useAudio(musicUrl: string | null, defaultOn: boolean) {
     }
     sfxSpinRef.current?.mute(isMuted)
     sfxWinRef.current?.mute(isMuted)
+    sfxLoseRef.current?.mute(isMuted)
   }
 
   // Sync mute state when config loads (PlayerApp mounts before config is available)
@@ -72,13 +74,21 @@ export function useAudio(musicUrl: string | null, defaultOn: boolean) {
     sfxSpinRef.current.play()
   }
 
-  function playWin() {
+  function playWin(isNoPrize = false) {
     if (mutedRef.current) return
-    if (!sfxWinRef.current) {
-      sfxWinRef.current = new Howl({ src: ['/assets/sfx-win.mp3'], volume: 0.8 })
-      sfxWinRef.current.mute(mutedRef.current)
+    if (isNoPrize) {
+      if (!sfxLoseRef.current) {
+        sfxLoseRef.current = new Howl({ src: ['/assets/sfx-lose.mp3'], volume: 0.8 })
+        sfxLoseRef.current.mute(mutedRef.current)
+      }
+      sfxLoseRef.current.play()
+    } else {
+      if (!sfxWinRef.current) {
+        sfxWinRef.current = new Howl({ src: ['/assets/sfx-win.mp3'], volume: 0.8 })
+        sfxWinRef.current.mute(mutedRef.current)
+      }
+      sfxWinRef.current.play()
     }
-    sfxWinRef.current.play()
   }
 
   /** Must be called directly from a user gesture (tap/click) for iOS */
