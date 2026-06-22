@@ -10,6 +10,7 @@ type Props = {
   onSpinComplete: (result: SpinResult) => void
   onAlreadyPlayed: () => void
   playSpin: () => void
+  stopSpin: () => void
   playWin: (isNoPrize?: boolean) => void
 }
 
@@ -19,6 +20,7 @@ export default function GameScreen({
   onSpinComplete,
   onAlreadyPlayed,
   playSpin,
+  stopSpin,
   playWin,
 }: Props) {
   const [use2D, setUse2D] = useState(false)
@@ -98,6 +100,7 @@ export default function GameScreen({
                 onSpinComplete={onSpinComplete}
                 onAlreadyPlayed={onAlreadyPlayed}
                 playSpin={playSpin}
+                stopSpin={stopSpin}
                 playWin={playWin}
               />
             </ErrorBoundary>

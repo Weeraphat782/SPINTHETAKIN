@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
+
 const TAKIN_FRONT = '/assets/Takin.png'
-const TAKIN_BACK = '/assets/takin back.png'
+const TAKIN_BACK = '/assets/takin%20back.png'
 
 type Props = {
   spinning: boolean
@@ -8,7 +10,17 @@ type Props = {
 }
 
 export default function SpinningTakin({ spinning, hasSpun, onClick }: Props) {
+  const [showBack, setShowBack] = useState(false)
   const interactive = !spinning && !hasSpun
+
+  useEffect(() => {
+    if (!spinning) {
+      setShowBack(false)
+      return
+    }
+    const id = setInterval(() => setShowBack((v) => !v), 350)
+    return () => clearInterval(id)
+  }, [spinning])
 
   return (
     <div
@@ -30,23 +42,12 @@ export default function SpinningTakin({ spinning, hasSpun, onClick }: Props) {
       }}
     >
       <div className={spinning ? 'takin-mascot--running' : 'animate-breathe'}>
-        <div className="takin-mascot__frame">
-          <img
-            src={TAKIN_FRONT}
-            alt="Takin"
-            draggable={false}
-            className={spinning ? 'takin-mascot__sprite takin-mascot__sprite--front' : 'takin-mascot__sprite'}
-          />
-          {spinning && (
-            <img
-              src={TAKIN_BACK}
-              alt=""
-              aria-hidden
-              draggable={false}
-              className="takin-mascot__sprite takin-mascot__sprite--back"
-            />
-          )}
-        </div>
+        <img
+          src={spinning && showBack ? TAKIN_BACK : TAKIN_FRONT}
+          alt="Takin"
+          draggable={false}
+          style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain', pointerEvents: 'none' }}
+        />
       </div>
     </div>
   )

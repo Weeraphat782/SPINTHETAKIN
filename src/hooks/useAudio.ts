@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { Howl } from 'howler'
+import { Howl, Howler } from 'howler'
 
 // Background music uses native HTML5 Audio — no AudioContext, no autoUnlock conflicts
-// SFX use Howl but are lazy-created only after a user gesture has already occurred
+// SFX use Howl; sfx-spin is preloaded on first user gesture so it's ready immediately
 
 export function useAudio(musicUrl: string | null, defaultOn: boolean) {
   const [muted, setMuted] = useState(!defaultOn)
@@ -59,19 +59,33 @@ export function useAudio(musicUrl: string | null, defaultOn: boolean) {
     return bgRef.current
   }
 
-  /** User gesture (e.g. nickname focus) — unmute and play audibly */
+  /** User gesture (e.g. nickname focus) — unmute, play music, preload SFX */
   function startMusic() {
     setMuted(false)
     applyMuteState(false)
+    // Preload spin SFX and resume AudioContext while inside a user gesture
+    if (!sfxSpinRef.current) {
+      sfxSpinRef.current = new Howl({ src: ['/assets/sfx-spin.mp3'], volume: 0.6, preload: true })
+    }
+    Howler.ctx?.resume().catch(() => {/* ignore */})
   }
 
   function playSpin() {
     if (mutedRef.current) return
     if (!sfxSpinRef.current) {
-      sfxSpinRef.current = new Howl({ src: ['/assets/sfx-spin.mp3'], volume: 0.6 })
-      sfxSpinRef.current.mute(mutedRef.current)
+      sfxSpinRef.current = new Howl({ src: ['/assets/sfx-spin.mp3'], volume: 0.6, preload: true })
     }
-    sfxSpinRef.current.play()
+    // Resume AudioContext in case it was suspended between screens
+    const ctx = Howler.ctx
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume().then(() => sfxSpinRef.current?.play())
+    } else {
+      sfxSpinRef.current.play()
+    }
+  }
+
+  function stopSpin() {
+    sfxSpinRef.current?.stop()
   }
 
   function playWin(isNoPrize = false) {
@@ -98,5 +112,5 @@ export function useAudio(musicUrl: string | null, defaultOn: boolean) {
     applyMuteState(next)
   }
 
-  return { muted, toggleMute, startMusic, playSpin, playWin }
+  return { muted, toggleMute, startMusic, playSpin, stopSpin, playWin }
 }

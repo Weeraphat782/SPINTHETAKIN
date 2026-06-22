@@ -16,6 +16,7 @@ type Props = {
   onSpinComplete: (result: SpinResult) => void
   onAlreadyPlayed: () => void
   playSpin: () => void
+  stopSpin: () => void
   playWin: (isNoPrize?: boolean) => void
 }
 
@@ -37,6 +38,7 @@ export default function WheelScene({
   onSpinComplete,
   onAlreadyPlayed,
   playSpin,
+  stopSpin,
   playWin,
 }: Props) {
   const [spinning, setSpinning] = useState(false)
@@ -48,7 +50,6 @@ export default function WheelScene({
     if (spinning || hasSpun) return
     setSpinning(true)
     setHasSpun(true)
-    playSpin()
 
     try {
       const result = await apiSpin(sessionToken)
@@ -78,10 +79,14 @@ export default function WheelScene({
         z: -target,
         duration: spinDurationMs / 1000,
         ease: 'power3.out',
+        onStart: () => {
+          playSpin()
+        },
         onUpdate: () => {
           currentAngleRef.current = -mesh.rotation.z
         },
         onComplete: () => {
+          stopSpin()
           setSpinning(false)
           playWin(result.isNoPrize)
           onSpinComplete(result)
@@ -92,7 +97,7 @@ export default function WheelScene({
       setSpinning(false)
       setHasSpun(false)
     }
-  }, [spinning, hasSpun, sessionToken, prizes.length, spinDurationMs, playSpin, playWin, onSpinComplete, onAlreadyPlayed])
+  }, [spinning, hasSpun, sessionToken, prizes.length, spinDurationMs, playSpin, stopSpin, playWin, onSpinComplete, onAlreadyPlayed])
 
   return (
     <div className="w-full h-full relative overflow-hidden">

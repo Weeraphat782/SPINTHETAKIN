@@ -24,7 +24,7 @@ export default function PlayerApp() {
       .catch(() => setConfigError('Unable to load game. Please refresh.'))
   }, [])
 
-  const { muted, toggleMute, startMusic, playSpin, playWin } = useAudio(
+  const { muted, toggleMute, startMusic, playSpin, stopSpin, playWin } = useAudio(
     config?.musicUrl ?? null,
     config?.musicDefaultOn ?? false
   )
@@ -68,6 +68,7 @@ export default function PlayerApp() {
               onSpinComplete={goToWinner}
               onAlreadyPlayed={goToAlreadyPlayed}
               playSpin={playSpin}
+              stopSpin={stopSpin}
               playWin={playWin}
             />
           </div>
