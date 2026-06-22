@@ -2,8 +2,8 @@
 export default function Pointer() {
   return (
     <group position={[0, 0, 0.25]}>
-      {/* Needle tip — near the rim */}
-      <mesh position={[0, 2.1, 0]}>
+      {/* Needle tip — mid-wheel */}
+      <mesh position={[0, 1.05, 0]}>
         <coneGeometry args={[0.10, 0.50, 6]} />
         <meshStandardMaterial
           color="#E07B39"
@@ -15,8 +15,8 @@ export default function Pointer() {
       </mesh>
 
       {/* Tapered shaft from center to tip base */}
-      <mesh position={[0, 1.05, 0]}>
-        <cylinderGeometry args={[0.04, 0.09, 2.10, 8]} />
+      <mesh position={[0, 0.525, 0]}>
+        <cylinderGeometry args={[0.04, 0.09, 1.05, 8]} />
         <meshStandardMaterial color="#D4940A" metalness={0.65} roughness={0.3} />
       </mesh>
 
