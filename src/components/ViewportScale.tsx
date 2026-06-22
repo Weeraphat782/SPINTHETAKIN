@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 
-/** Reference canvas — layout is authored at this size and scaled uniformly to fit. */
+/** Reference canvas — layout is authored at this size and scaled to cover the device. */
 export const DESIGN_WIDTH = 390
 export const DESIGN_HEIGHT = 844
 
@@ -13,7 +13,8 @@ export default function ViewportScale({ children }: Props) {
     function update() {
       const w = window.visualViewport?.width ?? window.innerWidth
       const h = window.visualViewport?.height ?? window.innerHeight
-      setScale(Math.min(w / DESIGN_WIDTH, h / DESIGN_HEIGHT))
+      // Cover: scale up until the canvas fills the screen (no letterbox bars).
+      setScale(Math.max(w / DESIGN_WIDTH, h / DESIGN_HEIGHT))
     }
 
     update()
@@ -37,7 +38,6 @@ export default function ViewportScale({ children }: Props) {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        background: '#87CEEB',
       }}
     >
       <div
