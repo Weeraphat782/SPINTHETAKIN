@@ -25,8 +25,12 @@ export default function GameScreen({
 
   return (
     <motion.div
-      className="relative w-full h-full flex flex-col overflow-hidden"
       style={{
+        position: 'absolute',
+        inset: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
         backgroundImage: 'url(/assets/Background.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center bottom',
