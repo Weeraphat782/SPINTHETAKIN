@@ -5,9 +5,10 @@ import PrizePopup from '../ui/PrizePopup'
 type Props = {
   result: SpinResult
   onDone: () => void
+  logoUrl?: string
 }
 
-export default function WinnerScreen({ result, onDone }: Props) {
+export default function WinnerScreen({ result, onDone, logoUrl }: Props) {
   const isWin = !result.isNoPrize
 
   return (
@@ -38,6 +39,16 @@ export default function WinnerScreen({ result, onDone }: Props) {
               }}
             />
           ))}
+        </div>
+      )}
+
+      {logoUrl && (
+        <div style={{ position: 'absolute', top: 'clamp(8px, 2svh, 20px)', left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 10, pointerEvents: 'none' }}>
+          <img
+            src={logoUrl}
+            alt="Logo"
+            style={{ height: 'clamp(36px, 7svh, 60px)', objectFit: 'contain', mixBlendMode: 'multiply', filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.15))' }}
+          />
         </div>
       )}
 

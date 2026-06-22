@@ -76,7 +76,7 @@ export default function PlayerApp() {
 
         {state.screen === 'winner' && state.spinResult && (
           <div key="winner" className="absolute inset-0">
-            <WinnerScreen result={state.spinResult} onDone={reset} />
+            <WinnerScreen result={state.spinResult} onDone={reset} logoUrl={config.logoUrl} />
           </div>
         )}
 
