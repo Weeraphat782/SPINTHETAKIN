@@ -31,7 +31,7 @@ export default function PrizePopup({ result, onDone }: Props) {
 
   return (
     <motion.div
-      className="absolute inset-0 z-50 flex items-end justify-center"
+      className="fixed inset-0 z-50 flex items-end justify-center"
       style={{ background: 'rgba(44,24,16,0.6)', backdropFilter: 'blur(3px)' }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

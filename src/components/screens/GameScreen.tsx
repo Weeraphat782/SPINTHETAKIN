@@ -37,20 +37,31 @@ export default function GameScreen({
       transition={{ duration: 0.4 }}
     >
       {/* Logo + Banner */}
-      <div className="flex-shrink-0 flex flex-col items-center pt-3 pb-0 gap-1">
+      <div
+        className="flex-shrink-0 flex flex-col items-center gap-1"
+        style={{ paddingTop: 'clamp(8px, 1.5vh, 12px)' }}
+      >
         {config.logoUrl && (
           <img
             src={config.logoUrl}
             alt="Logo"
             className="object-contain"
-            style={{ height: 64, mixBlendMode: 'multiply', filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.2))' }}
+            style={{
+              height: 'clamp(40px, 8vh, 64px)',
+              mixBlendMode: 'multiply',
+              filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.2))',
+            }}
           />
         )}
         <img
           src="/assets/Banner.png"
           alt="Spin the Takin"
           className="object-contain w-full"
-          style={{ maxHeight: 300, maxWidth: 380, filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.3))' }}
+          style={{
+            maxHeight: 'clamp(72px, 16vh, 300px)',
+            maxWidth: 380,
+            filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.3))',
+          }}
         />
       </div>
 

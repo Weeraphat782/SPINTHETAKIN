@@ -47,7 +47,7 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
 
   return (
     <div
-      className="relative w-full h-full flex flex-col items-center justify-between overflow-hidden"
+      className="relative w-full h-full flex flex-col overflow-hidden"
       style={{
         backgroundImage: 'url(/assets/Background.png)',
         backgroundSize: 'cover',
@@ -61,54 +61,64 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
         style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.18) 100%)', zIndex: 0 }}
       />
 
-      {/* Main content */}
+      {/* Main content — fills viewport, shrinks proportionally on short screens */}
       <motion.div
-        className="relative w-full max-w-sm mx-auto px-5 flex flex-col items-center"
-        style={{ paddingTop: 0, zIndex: 1 }}
+        className="relative flex-1 min-h-0 w-full max-w-sm mx-auto px-5 flex flex-col items-center justify-between"
+        style={{
+          zIndex: 1,
+          paddingTop: 'clamp(4px, 1vh, 12px)',
+          paddingBottom: 'clamp(8px, 2vh, 24px)',
+          gap: 'clamp(4px, 1vh, 12px)',
+        }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Logo */}
-        {config.logoUrl ? (
+        <div className="w-full flex flex-col items-center shrink-0">
+          {/* Logo */}
+          {config.logoUrl ? (
+            <img
+              src={config.logoUrl}
+              alt="Logo"
+              className="object-contain drop-shadow-md"
+              style={{ height: 'clamp(72px, 16vh, 150px)', mixBlendMode: 'multiply' }}
+            />
+          ) : (
+            <div
+              className="flex items-center gap-2 px-5 py-2 rounded-full"
+              style={{
+                background: 'rgba(255,255,255,0.85)',
+                border: '1.5px solid rgba(212,148,10,0.6)',
+                boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+              }}
+            >
+              <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#B22222' }}>OMG</span>
+              <span style={{ color: 'rgba(44,24,16,0.3)' }}>|</span>
+              <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#2C1810' }}>Bhutan Airlines</span>
+            </div>
+          )}
+
+          {/* Banner */}
           <img
-            src={config.logoUrl}
-            alt="Logo"
-            className="mb-3 object-contain drop-shadow-md"
-            style={{ height: 150, mixBlendMode: 'multiply' }}
-          />
-        ) : (
-          <div
-            className="flex items-center gap-2 mb-3 px-5 py-2 rounded-full"
+            src="/assets/Banner.png"
+            alt="Spin the Takin"
+            className="object-contain w-full"
             style={{
-              background: 'rgba(255,255,255,0.85)',
-              border: '1.5px solid rgba(212,148,10,0.6)',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+              maxHeight: 'clamp(100px, 22vh, 300px)',
+              maxWidth: 380,
+              filter: 'drop-shadow(0 3px 12px rgba(0,0,0,0.4))',
             }}
-          >
-            <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#B22222' }}>OMG</span>
-            <span style={{ color: 'rgba(44,24,16,0.3)' }}>|</span>
-            <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#2C1810' }}>Bhutan Airlines</span>
-          </div>
-        )}
+          />
+        </div>
 
-        {/* Banner */}
-        <img
-          src="/assets/Banner.png"
-          alt="Spin the Takin"
-          className="object-contain w-full mb-3"
-          style={{ maxHeight: 300, maxWidth: 380, filter: 'drop-shadow(0 3px 12px rgba(0,0,0,0.4))' }}
-        />
-
-        {/* Takin image */}
+        {/* Takin image — flex middle, scales down on short screens */}
         <img
           src="/assets/Takin.png"
           alt="Takin"
           draggable={false}
-          className="mb-4 animate-breathe"
+          className="flex-1 min-h-0 w-auto max-w-full object-contain animate-breathe"
           style={{
-            height: 220,
-            objectFit: 'contain',
+            maxHeight: 'clamp(80px, 26vh, 220px)',
             filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.45))',
             userSelect: 'none',
           }}
@@ -116,8 +126,10 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
 
         {/* Form card */}
         <div
-          className="w-full rounded-2xl px-5 py-5"
+          className="w-full shrink-0 rounded-2xl px-5"
           style={{
+            paddingTop: 'clamp(12px, 2vh, 20px)',
+            paddingBottom: 'clamp(12px, 2vh, 20px)',
             background: 'rgba(255,255,255,0.88)',
             border: '1.5px solid rgba(212,148,10,0.35)',
             boxShadow: '0 8px 32px rgba(44,24,16,0.18)',
@@ -170,8 +182,6 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
           </form>
         </div>
       </motion.div>
-
-      <div style={{ height: 24 }} />
     </div>
   )
 }
