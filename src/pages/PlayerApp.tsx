@@ -46,8 +46,6 @@ export default function PlayerApp() {
 
   return (
     <div className="relative w-full h-full overflow-hidden">
-      <MuteButton muted={muted} onToggle={toggleMute} />
-
       <AnimatePresence mode="wait">
         {state.screen === 'landing' && (
           <div key="landing" className="absolute inset-0">
@@ -86,6 +84,11 @@ export default function PlayerApp() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Above all screens — pointer-events-none wrapper so taps reach the button on mobile */}
+      <div className="absolute inset-0 z-[100] pointer-events-none">
+        <MuteButton muted={muted} onToggle={toggleMute} />
+      </div>
     </div>
   )
 }

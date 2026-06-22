@@ -6,13 +6,32 @@ import { Howl } from 'howler'
 
 export function useAudio(musicUrl: string | null, defaultOn: boolean) {
   const [muted, setMuted] = useState(!defaultOn)
+  const mutedRef = useRef(!defaultOn)
   const bgRef = useRef<HTMLAudioElement | null>(null)
   const sfxSpinRef = useRef<Howl | null>(null)
   const sfxWinRef = useRef<Howl | null>(null)
 
+  function applyMuteState(isMuted: boolean) {
+    mutedRef.current = isMuted
+    const audio = getOrCreateBg()
+    if (audio) {
+      audio.muted = isMuted
+      if (!isMuted) {
+        audio.volume = 0.4
+        if (audio.paused) {
+          audio.play().catch(() => {/* browser blocked */})
+        }
+      }
+    }
+    sfxSpinRef.current?.mute(isMuted)
+    sfxWinRef.current?.mute(isMuted)
+  }
+
   // Sync mute state when config loads (PlayerApp mounts before config is available)
   useEffect(() => {
-    setMuted(!defaultOn)
+    const isMuted = !defaultOn
+    setMuted(isMuted)
+    applyMuteState(isMuted)
   }, [defaultOn])
 
   // Tear down old audio element when musicUrl changes
@@ -28,6 +47,11 @@ export function useAudio(musicUrl: string | null, defaultOn: boolean) {
     if (!bgRef.current) {
       const audio = new Audio(musicUrl)
       audio.loop = true
+      audio.preload = 'auto'
+      audio.setAttribute('playsinline', '')
+      audio.setAttribute('webkit-playsinline', '')
+      audio.muted = mutedRef.current
+      audio.volume = 0.4
       bgRef.current = audio
     }
     return bgRef.current
@@ -35,42 +59,33 @@ export function useAudio(musicUrl: string | null, defaultOn: boolean) {
 
   /** User gesture (e.g. nickname focus) — unmute and play audibly */
   function startMusic() {
-    const audio = getOrCreateBg()
-    if (!audio) return
     setMuted(false)
-    audio.volume = 0.4
-    audio.play().catch(() => {/* browser blocked */})
+    applyMuteState(false)
   }
 
   function playSpin() {
-    if (muted) return
+    if (mutedRef.current) return
     if (!sfxSpinRef.current) {
       sfxSpinRef.current = new Howl({ src: ['/assets/sfx-spin.mp3'], volume: 0.6 })
+      sfxSpinRef.current.mute(mutedRef.current)
     }
     sfxSpinRef.current.play()
   }
 
   function playWin() {
-    if (muted) return
+    if (mutedRef.current) return
     if (!sfxWinRef.current) {
       sfxWinRef.current = new Howl({ src: ['/assets/sfx-win.mp3'], volume: 0.8 })
+      sfxWinRef.current.mute(mutedRef.current)
     }
     sfxWinRef.current.play()
   }
 
+  /** Must be called directly from a user gesture (tap/click) for iOS */
   function toggleMute() {
-    setMuted(prev => {
-      const next = !prev
-      const audio = getOrCreateBg()
-      if (audio) {
-        audio.volume = next ? 0 : 0.4
-        // If unmuting and audio is paused, start it (user is performing a gesture right now)
-        if (!next && audio.paused) {
-          audio.play().catch(() => {})
-        }
-      }
-      return next
-    })
+    const next = !mutedRef.current
+    setMuted(next)
+    applyMuteState(next)
   }
 
   return { muted, toggleMute, startMusic, playSpin, playWin }

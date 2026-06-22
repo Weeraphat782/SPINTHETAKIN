@@ -3,6 +3,11 @@ import { motion } from 'framer-motion'
 import type { GameConfig } from '../../lib/supabase'
 import { createSession } from '../../lib/api'
 
+/** Original design heights — rows share space in this ratio on every screen size */
+const LOGO_FR = 15
+const BANNER_FR = 30
+const TAKIN_FR = 22
+
 type Props = {
   config: GameConfig
   deviceId: string
@@ -55,34 +60,32 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
         backgroundColor: '#87CEEB',
       }}
     >
-      {/* Slight dark overlay so text stays readable over any background */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.18) 100%)', zIndex: 0 }}
       />
 
-      {/* Main content — grid rearranges: header/form auto, Takin fills leftover space */}
       <motion.div
         className="relative flex-1 min-h-0 w-full max-w-sm mx-auto px-5 grid"
         style={{
           zIndex: 1,
-          gridTemplateRows: 'minmax(0, auto) 1fr minmax(0, auto)',
+          gridTemplateRows: `${LOGO_FR}fr ${BANNER_FR}fr ${TAKIN_FR}fr auto`,
           paddingTop: 'clamp(4px, 1svh, 12px)',
           paddingBottom: 'clamp(8px, 2svh, 24px)',
-          gap: 'clamp(4px, 1svh, 10px)',
+          gap: 'clamp(2px, 0.6svh, 8px)',
         }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Header — shrinks first on short screens */}
-        <div className="w-full min-h-0 flex flex-col items-center overflow-hidden">
+        {/* Logo — 15 parts of hero height */}
+        <div className="min-h-0 w-full flex items-center justify-center">
           {config.logoUrl ? (
             <img
               src={config.logoUrl}
               alt="Logo"
-              className="object-contain drop-shadow-md"
-              style={{ height: 'clamp(48px, 10svh, 150px)', mixBlendMode: 'multiply' }}
+              className="max-h-full max-w-full object-contain drop-shadow-md"
+              style={{ mixBlendMode: 'multiply' }}
             />
           ) : (
             <div
@@ -98,38 +101,33 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
               <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#2C1810' }}>Bhutan Airlines</span>
             </div>
           )}
+        </div>
 
+        {/* Banner — 30 parts of hero height */}
+        <div className="min-h-0 w-full flex items-center justify-center">
           <img
             src="/assets/Banner.png"
             alt="Spin the Takin"
-            className="object-contain w-full"
-            style={{
-              maxHeight: 'clamp(56px, 12svh, 300px)',
-              maxWidth: 380,
-              filter: 'drop-shadow(0 3px 12px rgba(0,0,0,0.4))',
-            }}
+            className="max-h-full max-w-full object-contain"
+            style={{ filter: 'drop-shadow(0 3px 12px rgba(0,0,0,0.4))' }}
           />
         </div>
 
-        {/* Takin — grows into all remaining vertical space */}
+        {/* Takin — 22 parts of hero height (same scale system as logo & banner) */}
         <div className="min-h-0 w-full flex items-center justify-center">
           <img
             src="/assets/Takin.png"
             alt="Takin"
             draggable={false}
-            className="animate-breathe object-contain"
+            className="max-h-full max-w-full object-contain animate-breathe"
             style={{
-              maxHeight: '100%',
-              maxWidth: 'min(88%, 300px)',
-              width: 'auto',
-              height: 'auto',
               filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.45))',
               userSelect: 'none',
             }}
           />
         </div>
 
-        {/* Form card */}
+        {/* Form — natural height, not part of image ratio */}
         <div
           className="w-full rounded-2xl px-5"
           style={{

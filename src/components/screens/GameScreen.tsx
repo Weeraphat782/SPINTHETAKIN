@@ -36,33 +36,40 @@ export default function GameScreen({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
     >
-      {/* Logo + Banner */}
+      {/* Logo + Banner — proportional rows (64:300 design ratio) */}
       <div
-        className="flex-shrink-0 flex flex-col items-center gap-1"
-        style={{ paddingTop: 'clamp(6px, 1svh, 12px)' }}
+        className="flex-shrink-0 grid w-full min-h-0"
+        style={{
+          gridTemplateRows: config.logoUrl ? '64fr 300fr' : '1fr',
+          maxHeight: config.logoUrl ? 'clamp(96px, 32svh, 364px)' : 'clamp(72px, 22svh, 300px)',
+          paddingTop: 'clamp(6px, 1svh, 12px)',
+          gap: 'clamp(2px, 0.5svh, 6px)',
+        }}
       >
         {config.logoUrl && (
+          <div className="min-h-0 flex items-center justify-center">
+            <img
+              src={config.logoUrl}
+              alt="Logo"
+              className="max-h-full max-w-full object-contain"
+              style={{
+                mixBlendMode: 'multiply',
+                filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.2))',
+              }}
+            />
+          </div>
+        )}
+        <div className="min-h-0 flex items-center justify-center">
           <img
-            src={config.logoUrl}
-            alt="Logo"
-            className="object-contain"
+            src="/assets/Banner.png"
+            alt="Spin the Takin"
+            className="max-h-full max-w-full object-contain"
             style={{
-              height: 'clamp(36px, 7svh, 64px)',
-              mixBlendMode: 'multiply',
-              filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.2))',
+              maxWidth: 380,
+              filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.3))',
             }}
           />
-        )}
-        <img
-          src="/assets/Banner.png"
-          alt="Spin the Takin"
-          className="object-contain w-full"
-          style={{
-            maxHeight: 'clamp(56px, 11svh, 300px)',
-            maxWidth: 380,
-            filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.3))',
-          }}
-        />
+        </div>
       </div>
 
       {/* 3D Scene — fills remaining space */}
