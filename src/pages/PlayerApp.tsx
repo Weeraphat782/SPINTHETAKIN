@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type React from 'react'
 import { AnimatePresence } from 'framer-motion'
 import type { GameConfig } from '../lib/supabase'
 import { getConfig } from '../lib/api'
@@ -48,7 +49,7 @@ export default function PlayerApp() {
     <div className="relative w-full h-full overflow-hidden">
       <AnimatePresence mode="wait">
         {state.screen === 'landing' && (
-          <div key="landing" className="absolute inset-0">
+          <div key="landing" className="absolute inset-0" style={{ overflowY: 'auto', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
             <LandingScreen
               config={config}
               deviceId={deviceId}

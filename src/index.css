@@ -13,23 +13,30 @@
     --medium-brown:#5D3A1A;
   }
 
-  html, body {
-    height: 100%;
+  html {
+    height: 100svh;
+    height: -webkit-fill-available;
     margin: 0;
     padding: 0;
+    overflow: hidden;
+  }
+
+  body {
+    height: 100%;
+    min-height: -webkit-fill-available;
+    margin: 0;
+    padding: 0;
+    font-family: 'Georgia', serif;
+    background: var(--sky-mid);
+    color: var(--dark-text);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    overflow: hidden;
   }
 
   #root {
     height: 100%;
     width: 100%;
-  }
-
-  body {
-    font-family: 'Georgia', serif;
-    background: var(--cream);
-    color: var(--dark-text);
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
     overflow: hidden;
   }
 

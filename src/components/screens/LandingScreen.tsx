@@ -47,8 +47,9 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
 
   return (
     <div
-      className="relative w-full h-full flex flex-col items-center justify-between overflow-hidden"
+      className="relative w-full flex flex-col items-center"
       style={{
+        minHeight: '100%',
         backgroundImage: 'url(/assets/Background.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center bottom',
@@ -171,7 +172,7 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
         </div>
       </motion.div>
 
-      <div style={{ height: 24 }} />
+      <div style={{ height: 'max(24px, env(safe-area-inset-bottom, 0px))' }} />
     </div>
   )
 }
