@@ -76,13 +76,13 @@ export default function PlayerApp() {
 
         {state.screen === 'winner' && state.spinResult && (
           <div key="winner" className="absolute inset-0">
-            <WinnerScreen result={state.spinResult} onDone={reset} logoUrl={config.logoUrl} />
+            <WinnerScreen result={state.spinResult} onDone={reset} />
           </div>
         )}
 
         {state.screen === 'already-played' && (
           <div key="already-played" className="absolute inset-0">
-            <AlreadyPlayedScreen />
+            <AlreadyPlayedScreen logoUrl={config.logoUrl} />
           </div>
         )}
       </AnimatePresence>

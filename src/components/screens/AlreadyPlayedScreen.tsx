@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
 
-export default function AlreadyPlayedScreen() {
+type Props = { logoUrl?: string }
+
+export default function AlreadyPlayedScreen({ logoUrl }: Props) {
   return (
     <motion.div
       className="w-full h-full flex flex-col items-center justify-center px-8 text-center"
@@ -11,19 +13,22 @@ export default function AlreadyPlayedScreen() {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4 }}
     >
-      {/* Branding pill */}
-      <div
-        className="flex items-center gap-2 mb-8 px-5 py-2 rounded-full"
-        style={{
-          background: 'rgba(255,255,255,0.85)',
-          border: '1.5px solid rgba(212,148,10,0.5)',
-          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-        }}
-      >
-        <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#B22222' }}>OMG</span>
-        <span style={{ color: 'rgba(44,24,16,0.3)' }}>|</span>
-        <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#2C1810' }}>Bhutan Airlines</span>
-      </div>
+      {logoUrl ? (
+        <img
+          src={logoUrl}
+          alt="Logo"
+          style={{ height: 'clamp(60px, 12svh, 105px)', objectFit: 'contain', marginBottom: 28, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.15))' }}
+        />
+      ) : (
+        <div
+          className="flex items-center gap-2 mb-8 px-5 py-2 rounded-full"
+          style={{ background: 'rgba(255,255,255,0.85)', border: '1.5px solid rgba(212,148,10,0.5)' }}
+        >
+          <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#B22222' }}>OMG</span>
+          <span style={{ color: 'rgba(44,24,16,0.3)' }}>|</span>
+          <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#2C1810' }}>Bhutan Airlines</span>
+        </div>
+      )}
 
       <div className="text-7xl mb-6 animate-breathe drop-shadow-md">🦬</div>
 
