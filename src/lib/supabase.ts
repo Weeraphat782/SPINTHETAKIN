@@ -17,6 +17,8 @@ export type Prize = {
   active: boolean
   sort_order: number
   is_no_prize: boolean
+  pity_threshold: number | null
+  pity_counter: number
 }
 
 export type Player = {

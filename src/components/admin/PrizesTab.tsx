@@ -42,6 +42,7 @@ const emptyForm = (): FormData => ({
   name: '', description: '', image_url: '', color: '#C9A84C',
   weight: 10, quantity_total: null, quantity_remaining: null,
   active: true, sort_order: 0, is_no_prize: false,
+  pity_threshold: null, pity_counter: 0,
 })
 
 export default function PrizesTab() {
@@ -78,6 +79,7 @@ export default function PrizesTab() {
       color: p.color, weight: p.weight, quantity_total: p.quantity_total,
       quantity_remaining: p.quantity_remaining, active: p.active, sort_order: p.sort_order,
       is_no_prize: p.is_no_prize ?? false,
+      pity_threshold: p.pity_threshold ?? null, pity_counter: p.pity_counter ?? 0,
     })
     setError('')
     setModal('edit')
@@ -178,7 +180,7 @@ export default function PrizesTab() {
           <table className="w-full text-sm">
             <thead style={{ background: 'rgba(212,148,10,0.12)' }}>
               <tr>
-                {['Prize', 'Win % (effective)', 'Image', 'Enabled', 'Actions'].map((h) => (
+                {['Prize', 'Win % (effective)', 'Pity', 'Image', 'Enabled', 'Actions'].map((h) => (
                   <th key={h} className="text-left px-4 py-3 font-semibold uppercase tracking-wide text-xs" style={{ color: '#5D3A1A' }}>{h}</th>
                 ))}
               </tr>
@@ -211,6 +213,21 @@ export default function PrizesTab() {
                         : '—'}
                     </span>
                     <span className="text-xs ml-1" style={{ color: '#5D3A1A', opacity: 0.5 }}>(w:{p.weight})</span>
+                  </td>
+                  <td className="px-4 py-3 text-sm" style={{ color: '#5D3A1A' }}>
+                    {p.pity_threshold != null ? (
+                      <div>
+                        <span style={{ fontWeight: 600, color: p.pity_counter >= p.pity_threshold ? '#B22222' : '#D4940A' }}>
+                          {p.pity_counter}/{p.pity_threshold}
+                        </span>
+                        <span className="text-xs ml-1" style={{ opacity: 0.6 }}>spins</span>
+                        {p.pity_counter >= p.pity_threshold && (
+                          <span className="block text-xs font-bold" style={{ color: '#B22222' }}>READY!</span>
+                        )}
+                      </div>
+                    ) : (
+                      <span style={{ opacity: 0.35 }}>—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     {p.image_url ? (
@@ -319,6 +336,28 @@ export default function PrizesTab() {
 
               <Field label="Sort Order">
                 <input className="field-light" type="number" min={0} value={form.sort_order} onChange={(e) => setForm((f) => ({ ...f, sort_order: Number(e.target.value) }))} />
+              </Field>
+
+              <Field label="Guarantee every N spins (leave blank = off)">
+                <input
+                  className="field-light"
+                  type="number"
+                  min={1}
+                  placeholder="e.g. 50"
+                  value={form.pity_threshold ?? ''}
+                  onChange={(e) => {
+                    const v = e.target.value === '' ? null : Number(e.target.value)
+                    setForm((f) => ({ ...f, pity_threshold: v }))
+                  }}
+                />
+                <span className="text-xs mt-0.5" style={{ color: '#5D3A1A', opacity: 0.65 }}>
+                  If this prize hasn't dropped after N spins, it's guaranteed on the next spin.
+                  {form.pity_threshold && editing && (
+                    <span style={{ color: '#D4940A', fontWeight: 600 }}>
+                      {' '}Current counter: {editing.pity_counter ?? 0}/{form.pity_threshold}
+                    </span>
+                  )}
+                </span>
               </Field>
 
               <label className="flex items-start gap-3 cursor-pointer mt-1">
