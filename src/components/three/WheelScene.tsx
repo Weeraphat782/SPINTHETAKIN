@@ -1,6 +1,7 @@
-﻿import { Suspense, useRef, useState, useCallback } from 'react'
-import { Canvas } from '@react-three/fiber'
+﻿import { Suspense, useRef, useState, useCallback, useEffect } from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
 import gsap from 'gsap'
+import * as THREE from 'three'
 import WheelMesh, { type WheelMeshHandle } from './WheelMesh'
 import Pointer from './Pointer'
 import type { PublicPrize, SpinResult } from '../../lib/supabase'
@@ -16,6 +17,17 @@ type Props = {
   onAlreadyPlayed: () => void
   playSpin: () => void
   playWin: () => void
+}
+
+function ResponsiveCamera() {
+  const { camera, viewport } = useThree()
+  useEffect(() => {
+    const aspect = viewport.width / viewport.height
+    const fov = aspect < 0.65 ? 62 : aspect < 0.85 ? 58 : 52
+    ;(camera as THREE.PerspectiveCamera).fov = fov
+    camera.updateProjectionMatrix()
+  }, [camera, viewport.width, viewport.height])
+  return null
 }
 
 export default function WheelScene({
@@ -85,6 +97,7 @@ export default function WheelScene({
   return (
     <div className="w-full h-full relative overflow-hidden">
 
+
       {/* Transparent 3D canvas — only the wheel + pointer */}
       <Canvas
         camera={{ position: [0, 0, 10], fov: 58 }}
@@ -95,6 +108,7 @@ export default function WheelScene({
           gl.setClearColor(0x000000, 0)
         }}
       >
+        <ResponsiveCamera />
         <ambientLight intensity={1.4} />
         <directionalLight position={[0, 0, 10]} intensity={1.2} />
         <directionalLight position={[5, 8, 5]} intensity={0.6} />

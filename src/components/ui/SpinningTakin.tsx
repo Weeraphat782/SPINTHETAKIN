@@ -1,5 +1,3 @@
-import { scaled, SPIN_TAKIN_W } from '../../lib/playerLayout'
-
 const TAKIN_FRONT = '/assets/Takin.png'
 const TAKIN_BACK = '/assets/takin back.png'
 
@@ -20,8 +18,8 @@ export default function SpinningTakin({ spinning, hasSpun, onClick }: Props) {
         bottom: '10%',
         left: '50%',
         transform: 'translateX(-50%)',
-        width: scaled(SPIN_TAKIN_W),
-        maxWidth: scaled(SPIN_TAKIN_W),
+        width: '48%',
+        maxWidth: 188,
         zIndex: 5,
         cursor: interactive ? 'pointer' : 'default',
         userSelect: 'none',
