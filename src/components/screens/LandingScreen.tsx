@@ -3,11 +3,6 @@ import { motion } from 'framer-motion'
 import type { GameConfig } from '../../lib/supabase'
 import { createSession } from '../../lib/api'
 
-/** Original design heights — rows share space in this ratio on every screen size */
-const LOGO_FR = 15
-const BANNER_FR = 30
-const TAKIN_FR = 22
-
 type Props = {
   config: GameConfig
   deviceId: string
@@ -52,7 +47,7 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
 
   return (
     <div
-      className="relative w-full h-full flex flex-col overflow-hidden"
+      className="relative w-full h-full flex flex-col items-center justify-between overflow-hidden"
       style={{
         backgroundImage: 'url(/assets/Background.png)',
         backgroundSize: 'cover',
@@ -60,86 +55,76 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
         backgroundColor: '#87CEEB',
       }}
     >
+      {/* Slight dark overlay so text stays readable over any background */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.18) 100%)', zIndex: 0 }}
       />
 
+      {/* Main content */}
       <motion.div
-        className="relative flex-1 min-h-0 w-full max-w-sm mx-auto px-5 grid"
-        style={{
-          zIndex: 1,
-          gridTemplateRows: `${LOGO_FR}fr ${BANNER_FR}fr ${TAKIN_FR}fr auto`,
-          paddingTop: 'clamp(4px, 1svh, 12px)',
-          paddingBottom: 'clamp(8px, 2svh, 24px)',
-          gap: 'clamp(2px, 0.6svh, 8px)',
-        }}
+        className="relative w-full max-w-sm mx-auto px-5 flex flex-col items-center"
+        style={{ paddingTop: 8, zIndex: 1 }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Logo — 15 parts of hero height */}
-        <div className="min-h-0 w-full flex items-center justify-center">
-          {config.logoUrl ? (
-            <img
-              src={config.logoUrl}
-              alt="Logo"
-              className="max-h-full max-w-full object-contain drop-shadow-md"
-              style={{ mixBlendMode: 'multiply' }}
-            />
-          ) : (
-            <div
-              className="flex items-center gap-2 px-5 py-2 rounded-full"
-              style={{
-                background: 'rgba(255,255,255,0.85)',
-                border: '1.5px solid rgba(212,148,10,0.6)',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
-              }}
-            >
-              <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#B22222' }}>OMG</span>
-              <span style={{ color: 'rgba(44,24,16,0.3)' }}>|</span>
-              <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#2C1810' }}>Bhutan Airlines</span>
-            </div>
-          )}
-        </div>
-
-        {/* Banner — 30 parts of hero height */}
-        <div className="min-h-0 w-full flex items-center justify-center">
+        {/* Logo */}
+        {config.logoUrl ? (
           <img
-            src="/assets/Banner.png"
-            alt="Spin the Takin"
-            className="max-h-full max-w-full object-contain"
-            style={{ filter: 'drop-shadow(0 3px 12px rgba(0,0,0,0.4))' }}
+            src={config.logoUrl}
+            alt="Logo"
+            className="mb-3 object-contain drop-shadow-md"
+            style={{ height: 150, mixBlendMode: 'multiply' }}
           />
-        </div>
-
-        {/* Takin — 22 parts of hero height (same scale system as logo & banner) */}
-        <div className="min-h-0 w-full flex items-center justify-center">
-          <img
-            src="/assets/Takin.png"
-            alt="Takin"
-            draggable={false}
-            className="max-h-full max-w-full object-contain animate-breathe"
+        ) : (
+          <div
+            className="flex items-center gap-2 mb-3 px-5 py-2 rounded-full"
             style={{
-              filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.45))',
-              userSelect: 'none',
+              background: 'rgba(255,255,255,0.85)',
+              border: '1.5px solid rgba(212,148,10,0.6)',
+              boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
             }}
-          />
-        </div>
+          >
+            <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#B22222' }}>OMG</span>
+            <span style={{ color: 'rgba(44,24,16,0.3)' }}>|</span>
+            <span className="font-bold text-sm tracking-widest uppercase" style={{ color: '#2C1810' }}>Bhutan Airlines</span>
+          </div>
+        )}
 
-        {/* Form — natural height, not part of image ratio */}
-        <div
-          className="w-full rounded-2xl px-5"
+        {/* Banner */}
+        <img
+          src="/assets/Banner.png"
+          alt="Spin the Takin"
+          className="object-contain w-full mb-3"
+          style={{ maxHeight: 300, maxWidth: 380, filter: 'drop-shadow(0 3px 12px rgba(0,0,0,0.4))' }}
+        />
+
+        {/* Takin image */}
+        <img
+          src="/assets/Takin.png"
+          alt="Takin"
+          draggable={false}
+          className="mb-4 animate-breathe"
           style={{
-            paddingTop: 'clamp(10px, 1.5svh, 20px)',
-            paddingBottom: 'clamp(10px, 1.5svh, 20px)',
+            height: 220,
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 6px 18px rgba(0,0,0,0.45))',
+            userSelect: 'none',
+          }}
+        />
+
+        {/* Form card */}
+        <div
+          className="w-full rounded-2xl px-5 py-5"
+          style={{
             background: 'rgba(255,255,255,0.88)',
             border: '1.5px solid rgba(212,148,10,0.35)',
             boxShadow: '0 8px 32px rgba(44,24,16,0.18)',
             backdropFilter: 'blur(10px)',
           }}
         >
-          <form onSubmit={handleSubmit} className="flex flex-col" style={{ gap: 'clamp(8px, 1.5svh, 12px)' }}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
               <label className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#5D3A1A' }}>
                 Nickname *
@@ -185,6 +170,8 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
           </form>
         </div>
       </motion.div>
+
+      <div style={{ height: 24 }} />
     </div>
   )
 }
