@@ -12,5 +12,6 @@ as $$
     pity_counter       = 0;
 $$;
 
--- Admin-only (authenticated role), not exposed to anon players
+-- Grant to both authenticated and anon — admin UI uses anon key client-side
 grant execute on function admin_reset_event() to authenticated;
+grant execute on function admin_reset_event() to anon;
