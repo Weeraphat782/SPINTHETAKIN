@@ -130,6 +130,21 @@ export default function PrizesTab() {
     setPrizes((ps) => ps.map((x) => x.id === updated.id ? updated : x))
   }
 
+  async function handleResetAll() {
+    if (!confirm('Reset all pity counters to 0 and refill limited prize stock to their total? This cannot be undone.')) return
+    setLoading(true)
+    setError('')
+    try {
+      await adminResetPrizes()
+      await load()
+      alert('Pity counters reset and stock refilled.')
+    } catch (e) {
+      setError(String(e))
+    } finally {
+      setLoading(false)
+    }
+  }
+
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
@@ -148,9 +163,14 @@ export default function PrizesTab() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold" style={{ color: '#B22222' }}>Prize Configuration</h2>
-        <button onClick={openAdd} className="btn-gold" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem' }}>
-          + Add Prize
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={openAdd} className="btn-gold" style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem' }}>
+            + Add Prize
+          </button>
+          <button onClick={handleResetAll} className="px-3 py-2 rounded-lg text-xs font-semibold" style={{ border: '1.5px solid rgba(44,24,16,0.12)', color: '#5D3A1A', background: 'transparent' }}>
+            Reset pity & stock
+          </button>
+        </div>
       </div>
 
       {deleteError && (
