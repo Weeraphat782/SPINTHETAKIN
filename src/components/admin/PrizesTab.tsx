@@ -6,6 +6,7 @@ import {
   adminUpdatePrize,
   adminDeletePrize,
   adminUploadAsset,
+  adminResetEvent,
 } from '../../lib/api'
 
 const COLORS = ['#E07B39','#C9A84C','#8B1A1A','#1a2a4a','#2d6a4f','#6b6375','#5b4fcf','#1a6b8b']
@@ -135,7 +136,7 @@ export default function PrizesTab() {
     setLoading(true)
     setError('')
     try {
-      await adminResetPrizes()
+      await adminResetEvent()
       await load()
       alert('Pity counters reset and stock refilled.')
     } catch (e) {
