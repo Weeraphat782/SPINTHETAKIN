@@ -9,7 +9,8 @@ set search_path = public
 as $$
   update prizes set
     quantity_remaining = quantity_total,
-    pity_counter       = 0;
+    pity_counter       = 0
+  where true;
 $$;
 
 -- Grant to both authenticated and anon — admin UI uses anon key client-side
