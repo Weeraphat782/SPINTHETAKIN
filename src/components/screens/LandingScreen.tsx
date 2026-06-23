@@ -128,7 +128,7 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
               <label className="text-xs uppercase tracking-widest font-semibold" style={{ color: '#5D3A1A' }}>
-                Nickname *
+                Full Name *
               </label>
               <input
                 type="text"
@@ -136,7 +136,7 @@ export default function LandingScreen({ config, deviceId, onStart, onAlreadyPlay
                 onChange={(e) => setNickname(e.target.value.slice(0, 40))}
                 onFocus={handleNicknameFocus}
                 onClick={handleNicknameFocus}
-                placeholder="Your name"
+                placeholder="Your full name"
                 maxLength={40}
                 required
                 className="field-light"
