@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import type { Settings } from '../../lib/supabase'
-import { adminGetSettings, adminUpdateSettings, adminResetDeviceLocks } from '../../lib/api'
+import { adminGetSettings, adminUpdateSettings, adminResetDeviceLocks, adminResetEvent } from '../../lib/api'
 
 export default function SettingsTab() {
   const [settings, setSettings] = useState<Settings | null>(null)
   const [saving, setSaving] = useState(false)
   const [resetting, setResetting] = useState(false)
+  const [resettingEvent, setResettingEvent] = useState(false)
   const [msg, setMsg] = useState('')
 
   useEffect(() => { adminGetSettings().then(setSettings) }, [])
@@ -24,6 +25,14 @@ export default function SettingsTab() {
     try { await adminResetDeviceLocks(); setMsg('Device locks cleared. All players can spin again.') }
     catch (e) { setMsg('Error: ' + String(e)) }
     finally { setResetting(false) }
+  }
+
+  async function handleResetEvent() {
+    if (!confirm('Reset all stock quantities and pity counters to their starting values? Use this before a new event after testing.')) return
+    setResettingEvent(true); setMsg('')
+    try { await adminResetEvent(); setMsg('Done — all quantities and pity counters have been reset to their starting values.') }
+    catch (e) { setMsg('Error: ' + String(e)) }
+    finally { setResettingEvent(false) }
   }
 
   if (!settings) return <p style={{ color: '#5D3A1A' }}>Loading…</p>
@@ -64,21 +73,42 @@ export default function SettingsTab() {
 
       {/* Danger zone */}
       <div
-        className="rounded-xl p-5 flex flex-col gap-3"
+        className="rounded-xl p-5 flex flex-col gap-4"
         style={{ border: '1.5px solid rgba(178,34,34,0.35)', background: 'rgba(178,34,34,0.06)' }}
       >
         <h3 className="font-bold text-sm" style={{ color: '#B22222' }}>⚠️ Danger Zone</h3>
-        <p className="text-sm" style={{ color: '#5D3A1A' }}>
-          Reset device locks to allow all players to spin again. Use this at the start of a new event day.
-        </p>
-        <button
-          onClick={handleResetLocks}
-          disabled={resetting}
-          className="self-start px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-red-50"
-          style={{ border: '1.5px solid #B22222', color: '#B22222', background: 'transparent' }}
-        >
-          {resetting ? 'Resetting…' : 'Reset All Device Locks'}
-        </button>
+
+        {/* Reset event counters */}
+        <div className="flex flex-col gap-1 pb-4" style={{ borderBottom: '1px solid rgba(178,34,34,0.15)' }}>
+          <p className="text-sm font-semibold" style={{ color: '#5D3A1A' }}>Reset Stock & Pity Counters</p>
+          <p className="text-xs" style={{ color: '#5D3A1A', opacity: 0.75 }}>
+            Restores all prize quantities back to their starting values and clears all pity counters. Use this after testing — before the real event starts.
+          </p>
+          <button
+            onClick={handleResetEvent}
+            disabled={resettingEvent}
+            className="self-start mt-1 px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-red-50"
+            style={{ border: '1.5px solid #B22222', color: '#B22222', background: 'transparent' }}
+          >
+            {resettingEvent ? 'Resetting…' : 'Reset Stock & Pity Counters'}
+          </button>
+        </div>
+
+        {/* Reset device locks */}
+        <div className="flex flex-col gap-1">
+          <p className="text-sm font-semibold" style={{ color: '#5D3A1A' }}>Reset Device Locks</p>
+          <p className="text-xs" style={{ color: '#5D3A1A', opacity: 0.75 }}>
+            Clears all play records so every device can spin again. Use this at the start of a new event day.
+          </p>
+          <button
+            onClick={handleResetLocks}
+            disabled={resetting}
+            className="self-start mt-1 px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:bg-red-50"
+            style={{ border: '1.5px solid #B22222', color: '#B22222', background: 'transparent' }}
+          >
+            {resetting ? 'Resetting…' : 'Reset All Device Locks'}
+          </button>
+        </div>
       </div>
     </div>
   )

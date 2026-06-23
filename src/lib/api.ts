@@ -138,6 +138,11 @@ export async function adminResetDeviceLocks(): Promise<void> {
   if (error) throw error
 }
 
+export async function adminResetEvent(): Promise<void> {
+  const { error } = await supabase.rpc('admin_reset_event')
+  if (error) throw error
+}
+
 export async function adminUploadAsset(
   bucket: 'prize-images' | 'branding-assets' | 'music',
   file: File
